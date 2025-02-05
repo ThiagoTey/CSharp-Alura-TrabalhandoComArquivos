@@ -123,6 +123,8 @@
             }
         }
 
+        public ContaCorrente() { }
+
         public ContaCorrente(int numero_agencia,string conta)
         {
             Numero_agencia = numero_agencia;
