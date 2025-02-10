@@ -25,3 +25,6 @@ List<ContaCorrente> listaDeContas = new() { contaTeste, contaTeste1, contaTeste2
 //GeradorXml.GerarXml(contaTeste);
 
 GeradorXml.GerarArquivosXml(listaDeContas);
+
+GeradorJson.GerarJson(listaDeContas);
+
