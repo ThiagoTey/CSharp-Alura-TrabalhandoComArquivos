@@ -12,7 +12,7 @@ namespace bytebank.Modelos.ADM.Funcionarios
         {
 
         }
-        public AutentificacaoUtil Autenticador { get; set; }
+        private AutentificacaoUtil Autenticador { get; set; }
         public bool Autenticar(string senha)
         {
             return this.Autenticador.ValidarSenha(this.Senha, senha);
