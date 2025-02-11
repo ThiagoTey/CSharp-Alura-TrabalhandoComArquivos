@@ -12,9 +12,14 @@ async Task ShowPokemonList()
         HttpResponseMessage response = await client.GetAsync(url);
         response.EnsureSuccessStatusCode();
 
+        JsonSerializerOptions options = new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true, // Ignora Lestras maiusculas e minusculas
+        };
+
         string jsonResponse = await response.Content.ReadAsStringAsync();
 
-        PokemonResponse pokemonData = JsonSerializer.Deserialize<PokemonResponse>(jsonResponse);
+        PokemonResponse pokemonData = JsonSerializer.Deserialize<PokemonResponse>(jsonResponse, options);
 
         foreach (Pokemon pokemon in pokemonData.Results)
         {

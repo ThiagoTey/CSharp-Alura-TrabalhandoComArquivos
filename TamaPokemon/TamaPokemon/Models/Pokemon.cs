@@ -4,12 +4,12 @@ namespace TamaPokemon.Models;
 
 public class Pokemon
 {
-    [JsonPropertyName("name")]
     public string Name { get; set; }
 }
 
 public class PokemonResponse
 {
-    [JsonPropertyName("results")]
     public List<Pokemon> Results { get; set; } = new();
+    public string Next { get; set; } = string.Empty;
+    public string Previous { get; set; } = string.Empty;
 }
