@@ -5,6 +5,10 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Gerador De Chaves Aleatórias Pix</Title>
+    <Description>Esse pacote se destina a gerar chaves pix de forma aleatória utilizando os recursos da estrutura Gui. (Projeto feito para testes)</Description>
+    <PackageId>$(AssemblyName)TesteAlura</PackageId>
   </PropertyGroup>
 
 </Project>
