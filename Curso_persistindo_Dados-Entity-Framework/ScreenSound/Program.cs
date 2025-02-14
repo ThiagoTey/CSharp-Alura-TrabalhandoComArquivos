@@ -6,8 +6,6 @@ try
 {
     var artistaDAL = new ArtistaDAL();
 
-    artistaDAL.Adicionar(new Artista("Slipknot", "Bio braba") { FotoPerfil = "Slipknot.jpg" });
-
     var listaArtistas = artistaDAL.Listar();
 
     foreach ( var artista in listaArtistas)
