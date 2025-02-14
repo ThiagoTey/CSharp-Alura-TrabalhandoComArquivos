@@ -11,6 +11,7 @@ public class Menu
         Name = name;
     }
     public string Name { get; set; }
+    public Pokemon AdopetPokemon { get; set; }
 
     public static void ShowOptionTitle(string? title)
     {
@@ -28,7 +29,7 @@ public class Menu
         switch (option)
         {
             case "1":
-                await AdoptPokemon();
+                await ChooseAdoptedPokemon();
                 break;
             case "2":
                 Console.WriteLine("Ver seus mascotes");
@@ -42,13 +43,44 @@ public class Menu
         }
     }
 
-    public async Task AdoptPokemon()
+    public async Task ChooseAdoptedPokemon()
     {
         ShowOptionTitle("Adotar um mascote");
         Console.WriteLine("Escolha um pokemon : ");
         string pokemonName = await ShowPokemonList();
         
         Console.WriteLine("Pokemon escolhido : " + pokemonName);
+        Pokemon pokemon = await GetUniquePokemon(pokemonName);
+        await AdoptPokemonOptions(pokemon);
+    }
+
+    public async Task AdoptPokemonOptions(Pokemon pokemon)
+    {
+        ShowOptionTitle("");
+        Console.WriteLine($"{Name} voce deseja");
+        Console.WriteLine($"1 - Saber mais sobre o {pokemon.Name}");
+        Console.WriteLine($"2 - Adotar {pokemon.Name}");
+        Console.WriteLine($"3 - Voltar {pokemon.Name}");
+
+        string option = Console.ReadLine()!;
+        switch (option)
+        {
+            case "1":
+                ShowOptionTitle("");
+                pokemon.ShowDetails();
+                Console.ReadKey();
+                await AdoptPokemonOptions(pokemon);
+                break;
+            case "2":
+                Console.WriteLine("Adotar pokemon");
+                break;
+            case "3":
+                await Start();
+                break;
+            default:
+                Console.WriteLine("Opção invalida");
+                break;
+        }
     }
 
     public async Task<string> ShowPokemonList()
@@ -86,7 +118,7 @@ public class Menu
         }
     }
 
-    public async Task ShowUniquePokemon(string pokemonName)
+    public async Task<Pokemon> GetUniquePokemon(string pokemonName)
     {
         string url = $"https://pokeapi.co/api/v2/pokemon/{pokemonName}";
         using HttpClient client = new HttpClient();
@@ -103,13 +135,8 @@ public class Menu
             string jsonResponse = await response.Content.ReadAsStringAsync();
 
             Pokemon pokemon = JsonSerializer.Deserialize<Pokemon>(jsonResponse, options);
+            return pokemon;
 
-            Console.WriteLine($"{pokemon.Name} Peso : {pokemon.Weight} - Altura {pokemon.Height} - ID {pokemon.Id}");
-
-            foreach (AbilityWrapper ability in pokemon.Abilities)
-            {
-                Console.WriteLine($"Habilidade : {ability.Ability.Name}");
-            }
         }
         catch (Exception)
         {

@@ -9,6 +9,16 @@ public class Pokemon
     public int Weight { get; set; }
     public int Height { get; set; }
     public List<AbilityWrapper> Abilities { get; set; } = new();
+
+    public void ShowDetails()
+    {
+        Console.WriteLine($"{Name} Peso : {Weight} - Altura {Height} - ID {Id}");
+
+        foreach (AbilityWrapper ability in Abilities)
+        {
+            Console.WriteLine($"Habilidade : {ability.Ability.Name}");
+        }
+    }
 }
 
 public class PokemonResponse
