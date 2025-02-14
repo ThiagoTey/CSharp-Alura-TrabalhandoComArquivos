@@ -4,7 +4,10 @@ using ScreenSound.Modelos;
 
 try
 {
-    var artistaDAL = new ArtistaDAL();
+    var context = new ScreenSoundContext();
+    var artistaDAL = new ArtistaDAL(context);
+
+    var novoArtista = new Artista("Ira!!!", "Banda Ira! D+") { Id = 1002};
 
     var listaArtistas = artistaDAL.Listar();
 
