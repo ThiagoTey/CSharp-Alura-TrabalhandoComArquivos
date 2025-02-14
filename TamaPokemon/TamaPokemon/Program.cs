@@ -1,69 +1,23 @@
 ﻿
 using System.Text.Json;
+using TamaPokemon.Menu;
 using TamaPokemon.Models;
 
-async Task ShowPokemonList()
+string name;
+
+void Start()
 {
-    using HttpClient client = new HttpClient();
+    Console.WriteLine(@" _____                     ____       _                              
+|_   _|_ _ _ __ ___   __ _|  _ \ ___ | | _____ _ __ ___   ___  _ __  
+  | |/ _` | '_ ` _ \ / _` | |_) / _ \| |/ / _ \ '_ ` _ \ / _ \| '_ \ 
+  | | (_| | | | | | | (_| |  __/ (_) |   <  __/ | | | | | (_) | | | |
+  |_|\__,_|_| |_| |_|\__,_|_|   \___/|_|\_\___|_| |_| |_|\___/|_| |_|");
 
-    try
-    {
-        string url = "https://pokeapi.co/api/v2/pokemon";
-        HttpResponseMessage response = await client.GetAsync(url);
-        response.EnsureSuccessStatusCode();
-
-        JsonSerializerOptions options = new JsonSerializerOptions()
-        {
-            PropertyNameCaseInsensitive = true, // Ignora Lestras maiusculas e minusculas
-        };
-
-        string jsonResponse = await response.Content.ReadAsStringAsync();
-
-        PokemonResponse pokemonData = JsonSerializer.Deserialize<PokemonResponse>(jsonResponse, options);
-
-        foreach (Pokemon pokemon in pokemonData.Results)
-        {
-            Console.WriteLine(pokemon.Name);
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine("Aconteceu uma exeção : " + ex.Message);
-        throw;
-    }
+    Console.WriteLine("Qual é o seu nome?");
+    name = Console.ReadLine()!;
 }
 
-async Task ShowUniquePokemon(string pokemonName)
-{
-    string url = $"https://pokeapi.co/api/v2/pokemon/{pokemonName}";
-    using HttpClient client = new HttpClient();
+Start();
 
-    try
-    {
-        HttpResponseMessage response = await client.GetAsync(url);
-
-        JsonSerializerOptions options = new JsonSerializerOptions()
-        {
-            PropertyNameCaseInsensitive = true, // Ignora Lestras maiusculas e minusculas
-        };
-
-        string jsonResponse = await response.Content.ReadAsStringAsync();
-
-        Pokemon pokemon = JsonSerializer.Deserialize<Pokemon>(jsonResponse, options);
-
-        Console.WriteLine($"{pokemon.Name} Peso : {pokemon.Weight} - Altura {pokemon.Height} - ID {pokemon.Id}");
-
-        foreach (AbilityWrapper ability in pokemon.Abilities)
-        {
-            Console.WriteLine($"Habilidade : {ability.Ability.Name}");
-        }
-    }
-    catch (Exception)
-    {
-
-        throw;
-    }
-
-}
-
-await ShowUniquePokemon("ditto");
+Menu menu = new(name);
+await menu.Start();
