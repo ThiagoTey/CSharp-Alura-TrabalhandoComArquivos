@@ -11,7 +11,7 @@ public class Menu
         Name = name;
     }
     public string Name { get; set; }
-    public Pokemon AdopetPokemon { get; set; }
+    public Pokemon AdoptedPokemon { get; set; }
 
     public static void ShowOptionTitle(string? title)
     {
@@ -33,6 +33,7 @@ public class Menu
                 break;
             case "2":
                 Console.WriteLine("Ver seus mascotes");
+                AdoptedPokemonDetails();
                 break;
             case "3":
                 Console.WriteLine("Sair");
@@ -73,6 +74,26 @@ public class Menu
                 break;
             case "2":
                 Console.WriteLine("Adotar pokemon");
+                AdoptedPokemon = pokemon;
+                Console.WriteLine("Pokemon adotado com sucesso, o ovo esta chovando : ");
+                Console.WriteLine(@"                                                                                                                    
+                                ████████                                  
+                              ██        ██                                
+                            ██▒▒▒▒        ██                              
+                          ██▒▒▒▒▒▒      ▒▒▒▒██                            
+                          ██▒▒▒▒▒▒      ▒▒▒▒██                            
+                        ██  ▒▒▒▒        ▒▒▒▒▒▒██                          
+                        ██                ▒▒▒▒██                          
+                      ██▒▒      ▒▒▒▒▒▒          ██                        
+                      ██      ▒▒▒▒▒▒▒▒▒▒        ██                        
+                      ██      ▒▒▒▒▒▒▒▒▒▒    ▒▒▒▒██                        
+                      ██▒▒▒▒  ▒▒▒▒▒▒▒▒▒▒  ▒▒▒▒▒▒██                        
+                        ██▒▒▒▒  ▒▒▒▒▒▒    ▒▒▒▒██                          
+                        ██▒▒▒▒            ▒▒▒▒██                          
+                          ██▒▒              ██                            
+                            ████        ████                              
+                                ████████                                                                                                                                                                        
+");
                 break;
             case "3":
                 await Start();
@@ -80,6 +101,19 @@ public class Menu
             default:
                 Console.WriteLine("Opção invalida");
                 break;
+        }
+    }
+
+    public void AdoptedPokemonDetails()
+    {
+        ShowOptionTitle("Mascote adotado");
+        if (AdoptedPokemon != null)
+        {
+            AdoptedPokemon.ShowDetails();
+        }
+        else
+        {
+            Console.WriteLine("Voce ainda não adotou um pokemon");
         }
     }
 
