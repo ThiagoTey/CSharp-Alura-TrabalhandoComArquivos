@@ -3,7 +3,7 @@ using ScreenSound.Modelos;
 
 namespace ScreenSound.Banco;
 
-class ArtistaDAL
+internal class ArtistaDAL : DAL<Artista>
 {
     private readonly ScreenSoundContext context;
 
@@ -12,30 +12,30 @@ class ArtistaDAL
         this.context = context;
     }
 
-    public IEnumerable<Artista> Listar()
+    public override IEnumerable<Artista> Listar()
     {
         return context.Artistas.ToList();
     }
 
-    public void Adicionar(Artista artista)
+    public override void Adicionar(Artista artista)
     {
         context.Artistas.Add(artista);
         context.SaveChanges();
     }
 
-    public void Remover(Artista artista)
+    public override void Remover(Artista artista)
     {
         context.Artistas.Remove(artista);
         context.SaveChanges();
     }
 
-    public void Atualizar(Artista artista)
+    public override void Atualizar(Artista artista)
     {
         context.Artistas.Update(artista);
         context.SaveChanges();
     }
 
-    public Artista ProcurarPeloNome(string nome)
+    public override Artista ProcurarPeloNome(string nome)
     {
         return context.Artistas.FirstOrDefault(a => a.Nome == nome);
     }
