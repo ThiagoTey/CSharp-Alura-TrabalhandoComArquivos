@@ -34,4 +34,9 @@ class ArtistaDAL
         context.Artistas.Update(artista);
         context.SaveChanges();
     }
+
+    public Artista ProcurarPeloNome(string nome)
+    {
+        return context.Artistas.FirstOrDefault(a => a.Nome == nome);
+    }
 }
