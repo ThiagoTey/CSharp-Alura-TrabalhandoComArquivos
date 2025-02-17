@@ -2,7 +2,7 @@
 
 namespace ScreenSound.Banco;
 
-internal abstract class DAL<T> where T : class
+internal class DAL<T> where T : class
 {
     protected readonly ScreenSoundContext context;
     protected DAL(ScreenSoundContext context)
@@ -28,6 +28,9 @@ internal abstract class DAL<T> where T : class
         context.Set<T>().Update(objeto);
         context.SaveChanges();
     }
-    public abstract T ProcurarPeloNome(string nome);
+    public T? ProcurarPor(Func<T, bool> condicao)
+    {
+        return context.Set<T>().FirstOrDefault(condicao);
+    }
 
 }
