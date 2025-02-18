@@ -1,7 +1,5 @@
 ﻿
-using System.Text.Json;
-using TamaPokemon.Menu;
-using TamaPokemon.Models;
+using TamaPokemon.Controller;
 
 string name;
 
@@ -19,5 +17,5 @@ void Start()
 
 Start();
 
-Menu menu = new(name);
-await menu.Start();
+TamaPokemonController controller = new(name);
+await controller.Start();
