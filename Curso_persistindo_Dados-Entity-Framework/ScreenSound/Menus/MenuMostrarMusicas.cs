@@ -11,7 +11,7 @@ internal class MenuMostrarMusicas : Menu
         ExibirTituloDaOpcao("Exibir detalhes do artista");
         Console.Write("Digite o nome do artista que deseja conhecer melhor: ");
         string nomeDoArtista = Console.ReadLine()!;
-        var artistaRecuperado = artistaDAL.ProcurarPor(a => a.Nome == nomeDoArtista);
+        var artistaRecuperado = artistaDAL.ProcurarPor(a => a.Nome.Equals(nomeDoArtista));
 
         if (artistaRecuperado != null)
         {
