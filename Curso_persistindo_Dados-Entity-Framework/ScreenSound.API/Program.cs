@@ -1,23 +1,27 @@
 using Microsoft.AspNetCore.Mvc;
 using ScreenSound.Banco;
 using ScreenSound.Modelos;
+using System.Data.SqlTypes;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Adiciona o serviço de banco de dados
+builder.Services.AddDbContext<ScreenSoundContext>();
+// Adiciona o serviço o objeto de DAL de artistas
+builder.Services.AddTransient<DAL<Artista>>();
 
 builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 var app = builder.Build();
 
-app.MapGet("/Artistas", () =>
+app.MapGet("/Artistas", ([FromServices] DAL<Artista> dal) =>
 {
-    var dal = new DAL<Artista>(new ScreenSoundContext());
     return Results.Ok(dal.Listar());
 });
 
-app.MapGet("/Artista/{nome}", (string nome) =>
+app.MapGet("/Artista/{nome}", ([FromServices] DAL<Artista> dal, string nome) =>
 {
-    var dal = new DAL<Artista>(new ScreenSoundContext());
     var artista =  dal.RecuperarPor( a => a.Nome.ToLower().Equals(nome.ToLower()));
     if(artista is null)
     {
@@ -26,9 +30,8 @@ app.MapGet("/Artista/{nome}", (string nome) =>
     return Results.Ok(artista);
 });
 
-app.MapPost("/Artistas", ([FromBody] Artista artista) =>
+app.MapPost("/Artistas", ([FromServices] DAL<Artista> dal, [FromBody] Artista artista) =>
 {
-    var dal = new DAL<Artista>(new ScreenSoundContext());
     if (string.IsNullOrEmpty(artista.FotoPerfil))
     {
         artista.FotoPerfil = "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_1280.png";
