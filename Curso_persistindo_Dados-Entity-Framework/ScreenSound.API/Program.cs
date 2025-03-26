@@ -8,10 +8,21 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 var app = builder.Build();
 
-app.MapGet("/", () =>
+app.MapGet("/Artistas", () =>
 {
     var dal = new DAL<Artista>(new ScreenSoundContext());
-    return dal.Listar();
+    return Results.Ok(dal.Listar());
+});
+
+app.MapGet("/Artista/{nome}", (string nome) =>
+{
+    var dal = new DAL<Artista>(new ScreenSoundContext());
+    var artista =  dal.RecuperarPor( a => a.Nome.ToLower().Equals(nome.ToLower()));
+    if(artista is null)
+    {
+        return Results.NotFound();
+    }
+    return Results.Ok(artista);
 });
 
 app.Run();

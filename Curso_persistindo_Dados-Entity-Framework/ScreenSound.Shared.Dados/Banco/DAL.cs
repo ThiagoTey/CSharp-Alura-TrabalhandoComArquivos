@@ -1,4 +1,5 @@
-﻿using ScreenSound.Modelos;
+﻿using System.Linq.Expressions;
+using ScreenSound.Modelos;
 
 namespace ScreenSound.Banco;
 
@@ -33,9 +34,14 @@ public class DAL<T> where T : class
         return context.Set<T>().FirstOrDefault(condicao);
     }
 
-    public IEnumerable<T> ListarPorCondicao(Func<T, bool> condicao) 
+    public IEnumerable<T> ListarPorCondicao(Expression<Func<T, bool>> condicao)
     {
         return context.Set<T>().Where(condicao).ToList();
-    } 
+    }
+
+    public T? RecuperarPor(Func<T, bool> condicao)
+    {
+        return context.Set<T>().FirstOrDefault(condicao);
+    }
 
 }
