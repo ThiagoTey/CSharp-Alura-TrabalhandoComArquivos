@@ -77,6 +77,18 @@ app.MapGet("/Musicas", ([FromServices] DAL<Musica> dal) =>
     return Results.Ok(dal.Listar());
 });
 
+app.MapGet("/Musica/{nome}", ([FromServices] DAL<Musica> dal, string nome) =>
+{
+    var musica = dal.RecuperarPor(a => a.Nome.ToLower().Equals(nome.ToLower()));
+
+    if (musica == null)
+    {
+        return Results.NotFound();
+    }
+
+    return Results.Ok(musica);
+});
+
 app.MapPost("/Musicas", ([FromServices] DAL<Musica> dal, [FromBody] Musica musica) =>
 {
     dal.Adicionar(musica);
