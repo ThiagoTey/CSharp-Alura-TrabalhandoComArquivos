@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Adiciona o serviço de banco de dados
+// Adiciona o serviço de contexto banco de dados para utilizar na aplicação
 builder.Services.AddDbContext<ScreenSoundContext>();
 // Adiciona o serviço o objeto de DAL de artistas
 builder.Services.AddTransient<DAL<Artista>>();
@@ -39,6 +39,17 @@ app.MapPost("/Artistas", ([FromServices] DAL<Artista> dal, [FromBody] Artista ar
 
     dal.Adicionar(artista);
     return Results.Ok();
+});
+
+app.MapDelete("Artistas/{id}", ([FromServices] DAL<Artista> dal, int id) =>
+{
+    var artista = dal.RecuperarPor(a => a.Id == id);
+    if (artista == null)
+    {
+        return Results.NotFound();
+    }
+    dal.Remover(artista);
+    return Results.NoContent();
 });
 
 app.Run();
