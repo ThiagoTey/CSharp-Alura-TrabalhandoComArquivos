@@ -22,8 +22,9 @@ builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options =
 
 var app = builder.Build();
 
-app.AddEndPoinsMusicas();
+// Funções para adicionar os endPoints com suas funções
 app.AddEndPointsArtistas();
+app.AddEndPoinsMusicas();
 
 // https://localhost:7239/Swagger/index.html para ver documentação de todos os endPoints com o Swagger
 app.UseSwagger();
