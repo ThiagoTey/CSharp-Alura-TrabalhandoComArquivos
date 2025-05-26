@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ScreenSound.API.Requests;
+using ScreenSound.API.Response;
 using ScreenSound.Banco;
 using ScreenSound.Modelos;
 
@@ -11,7 +12,12 @@ public static class ArtistasExtensions
     {
         app.MapGet("/Artistas", ([FromServices] DAL<Artista> dal) =>
         {
-            return Results.Ok(dal.Listar());
+            var artistas = dal.Listar();
+
+            var artistasResponse = artistas.Select(a =>
+                new ArtistaResponse(a.Id, a.Nome, a.Bio, a.FotoPerfil)
+            );
+            return Results.Ok(artistasResponse);
         });
 
         app.MapGet("/Artista/{nome}", ([FromServices] DAL<Artista> dal, string nome) =>
@@ -21,7 +27,15 @@ public static class ArtistasExtensions
             {
                 return Results.NotFound();
             }
-            return Results.Ok(artista);
+
+            var artistaResponse = new ArtistaResponse(
+                artista.Id,
+                artista.Nome,
+                artista.Bio,
+                artista.FotoPerfil
+            );
+
+            return Results.Ok(artistaResponse);
         });
 
         app.MapPost("/Artistas", ([FromServices] DAL<Artista> dal, [FromBody] ArtistaRequest artistaRequest) =>
