@@ -4,6 +4,7 @@ using ScreenSound.API.Requests;
 using ScreenSound.API.Response;
 using ScreenSound.Banco;
 using ScreenSound.Modelos;
+using ScreenSound.Shared.Modelos.Modelos;
 
 namespace ScreenSound.API.Endpoints;
 
@@ -13,13 +14,13 @@ public static class MusicasExtensions
     {
         app.MapGet("/Musicas", ([FromServices] DAL<Musica> dal) =>
         {
-            var Musicas = dal.Listar();
+            var musicas = dal.Listar();
 
-            var MusicasResponse = Musicas.Select(m =>
-                new MusicaResponse(m.Id, m.Nome, m.Artista.Nome, m.Artista!.Id, m.AnoLancamento)
+            var MusicasResponse = musicas.Select(m =>
+                new MusicaResponse(m.Id, m.Nome, m.Artista?.Nome, m.Artista?.Id, m.AnoLancamento)
             );
 
-            return Results.Ok(dal.Listar());
+            return Results.Ok(MusicasResponse);
         });
 
         app.MapGet("/Musica/{nome}", ([FromServices] DAL<Musica> dal, string nome) =>
@@ -46,8 +47,14 @@ public static class MusicasExtensions
         {
             var artista = artDal.RecuperarPor(a => a.Id == musicaRequest.ArtistaId);
 
-            var musica = new Musica(musicaRequest.Nome);
-            musica.Artista = artista;
+            var musica = new Musica(musicaRequest.Nome)
+            {
+                Artista = artista ?? throw new ArgumentException("Artista não encontrado."),
+
+                Generos = musicaRequest.Generos is not null 
+                ? GeneroRequestConverter(musicaRequest.Generos) 
+                : new List<Genero>()
+            };
             if(musicaRequest.AnoLancamento == 0)
             {
                 musica.AnoLancamento = null;
@@ -91,5 +98,15 @@ public static class MusicasExtensions
 
             return Results.NoContent();
         });
+    }
+
+    private static ICollection<Genero> GeneroRequestConverter(ICollection<GeneroRequest> generos)
+    {
+        return generos.Select(g => RequestToEntity(g)).ToList();
+    }
+
+    private static Genero RequestToEntity(GeneroRequest g)
+    {
+        return new Genero() { Nome = g.Nome, Descricao = g.Descricao ?? string.Empty };
     }
 }
