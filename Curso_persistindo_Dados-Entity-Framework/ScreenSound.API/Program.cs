@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ScreenSound.API.Endpoints;
 using ScreenSound.Banco;
 using ScreenSound.Modelos;
+using ScreenSound.Shared.Modelos.Modelos;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +16,8 @@ builder.Services.AddDbContext<ScreenSoundContext>(options =>
 builder.Services.AddTransient<DAL<Artista>>();
 // Adiciona o serviço o objeto de DAL de Musicas
 builder.Services.AddTransient<DAL<Musica>>();
+// Adiciona o serviço o objeto de DAL de Genero
+builder.Services.AddTransient<DAL<Genero>>();
 
 //Adiciona o serviço do Swagger para documentação da API
 builder.Services.AddEndpointsApiExplorer();
@@ -27,6 +30,7 @@ var app = builder.Build();
 // Funções para adicionar os endPoints com suas funções
 app.AddEndPointsArtistas();
 app.AddEndPoinsMusicas();
+app.AddEndPoinsGeneros();
 
 // https://localhost:7239/Swagger/index.html para ver documentação de todos os endPoints com o Swagger
 app.UseSwagger();

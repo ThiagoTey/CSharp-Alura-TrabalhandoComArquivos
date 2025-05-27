@@ -43,7 +43,8 @@ public static class MusicasExtensions
             return Results.Ok(musicaResponse);
         });
 
-        app.MapPost("/Musicas", ([FromServices] DAL<Musica> dal,[FromServices] DAL<Artista> artDal, [FromBody] MusicaRequest musicaRequest) =>
+        app.MapPost("/Musicas", ([FromServices] DAL<Musica> dal, [FromServices] DAL <Genero> generoDal, 
+            [FromServices] DAL<Artista> artDal, [FromBody] MusicaRequest musicaRequest) =>
         {
             var artista = artDal.RecuperarPor(a => a.Id == musicaRequest.ArtistaId);
 
@@ -52,7 +53,7 @@ public static class MusicasExtensions
                 Artista = artista ?? throw new ArgumentException("Artista não encontrado."),
 
                 Generos = musicaRequest.Generos is not null 
-                ? GeneroRequestConverter(musicaRequest.Generos) 
+                ? GeneroRequestConverter(musicaRequest.Generos, generoDal) 
                 : new List<Genero>()
             };
             if(musicaRequest.AnoLancamento == 0)
@@ -100,9 +101,25 @@ public static class MusicasExtensions
         });
     }
 
-    private static ICollection<Genero> GeneroRequestConverter(ICollection<GeneroRequest> generos)
+    private static ICollection<Genero> GeneroRequestConverter(ICollection<GeneroRequest> generos, DAL<Genero> generoDal)
     {
-        return generos.Select(g => RequestToEntity(g)).ToList();
+        var listaDeGeneros = new List<Genero>();
+        foreach (var genero in generos)
+        {
+            var entity = RequestToEntity(genero);
+            var generoExistente = generoDal.RecuperarPor(g => g.Nome.ToLower().Equals(genero.Nome.ToLower()));
+
+            // Entity nao cadastra o genero novamente se ele for encontrado
+            if(generoExistente is not null)
+            {
+                listaDeGeneros.Add(generoExistente);
+            } else
+            {
+                listaDeGeneros.Add(entity);
+            }
+        }
+
+        return listaDeGeneros;
     }
 
     private static Genero RequestToEntity(GeneroRequest g)
