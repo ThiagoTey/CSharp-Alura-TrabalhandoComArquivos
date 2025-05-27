@@ -12,7 +12,7 @@ class MenuMostrarMusicaPorAno : Menu
 
         Console.Write("Digite o ano de lancamento que voce deseja buscar : ");
         int anoLancamento = int.Parse(Console.ReadLine()!);
-        var context = new ScreenSoundContext();
+        using var context = ContextHelper.CriarContexto();
         DAL<Musica> musicaDal = new DAL<Musica>(context);
         var musicas = musicaDal.ListarPorCondicao(a => a.AnoLancamento == anoLancamento);
 
