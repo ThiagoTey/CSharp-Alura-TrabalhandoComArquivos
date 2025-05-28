@@ -30,7 +30,7 @@ var app = builder.Build();
 // Funções para adicionar os endPoints com suas funções
 app.AddEndPointsArtistas();
 app.AddEndPoinsMusicas();
-app.AddEndPoinsGeneros();
+app.AddEndPointGeneros();
 
 // https://localhost:7239/Swagger/index.html para ver documentação de todos os endPoints com o Swagger
 app.UseSwagger();
